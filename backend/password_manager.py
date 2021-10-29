@@ -68,10 +68,8 @@ class Password_manager():
             print('ERROR:Account for this email and application have already exist')
 
 
-    def find_password(self):
+    def find_password(self, app_name, email):
         """Find appropriate password to the account"""
-        app_name = input('Enter application name: ').lower()
-        email = input('Address email for this account: ')
 
         postgres_select_query = """SELECT password FROM accounts WHERE app_name='"""+app_name+"'"+ "AND email='"+email+"'"
         self.cursor.execute(postgres_select_query, app_name)
@@ -82,6 +80,10 @@ class Password_manager():
         else:
             print("This is your password for this account: " + result[0])
     
+        return result
+    
+    def xd(self):
+        return 'xd'
     def find_accounts(self):
         """Find accounts to connected email"""
         data = ('Password','Email','User','Link','App')
@@ -114,18 +116,11 @@ class Password_manager():
         else:
             return
     
-    def delete_account(self):
+    def delete_account(self,app_name, email):
         """Drop account from DB"""
-        app_name = input('Enter application name: ').lower()
-        email = input('Address email for this account: ').lower()
-        sure = input('Are you sure of changing the password? y/n ')
-
-        if sure == 'y':
-            postgres_select_query = "DELETE FROM accounts  WHERE email='"+email+"'AND app_name='"+app_name+"'"
-            self.cursor.execute(postgres_select_query, (email,app_name))
-            self.connection.commit()
-            print('Account deleted properly from DB ')
-        
-        else:
-            return
+      
+        postgres_select_query = "DELETE FROM accounts  WHERE email='"+email+"'AND app_name='"+app_name+"'"
+        self.cursor.execute(postgres_select_query, (email,app_name))
+        self.connection.commit()
+    
 

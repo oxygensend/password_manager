@@ -11,6 +11,9 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from menu_ui import Ui_MenuWindow
 import sys
+sys.path.insert(0, '/home/szymon/Documents/password_manager/backend')
+from password_manager import Password_manager
+
 
 
 class Ui_MainWindow():
@@ -18,6 +21,7 @@ class Ui_MainWindow():
     def __init__(self, MainWindow):
 
         self.setupUi(MainWindow)
+        self.password_mistakes = 0
     
     def setupUi(self, MainWindow):
 
@@ -31,7 +35,7 @@ class Ui_MainWindow():
         self.loginButton.setGeometry(QtCore.QRect(150, 150, 101, 31))
         self.loginButton.setObjectName("pushButton")
         self.loginButton.clicked.connect(self.check_password)
-
+        self.loginButton.setAutoDefault(True)
 
         self.lineEdit_password= QtWidgets.QLineEdit(self.centralwidget)
         self.lineEdit_password.setGeometry(QtCore.QRect(120, 100, 171, 31))
@@ -81,6 +85,7 @@ class Ui_MainWindow():
         
         msg = QtWidgets.QMessageBox()
 
+
         if self.lineEdit_password.text() == '1234':
             MainWindow.close()
             widget.show()
@@ -88,11 +93,19 @@ class Ui_MainWindow():
         else:
             msg.setText('Incorrect')
             msg.exec_()
+            self.lineEdit_password.clear()
+            self.password_mistakes+=1
+
+        
+        if(self.password_mistakes >= 3):
+            sys.exit(app.exec_())
+
 
 
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
+    app.setStyle("Fusion")
     #app.setQuitOnLastWindowClosed(False)
     MainWindow = QtWidgets.QMainWindow()
     MenuWindow = QtWidgets.QMainWindow()
@@ -107,8 +120,9 @@ if __name__ == "__main__":
     widget.addWidget(MenuWindow)
     widget.setFixedHeight(602)
     widget.setFixedWidth(782)
+    pm = Password_manager()
     ui = Ui_MainWindow(MainWindow)
-    ui_menu = Ui_MenuWindow(MenuWindow, Form,Form1, Form2, Form3, Form4, Form5, widget)
+    ui_menu = Ui_MenuWindow(MenuWindow, Form,Form1, Form2, Form3, Form4, Form5, widget, pm)
     MainWindow.show()
     sys.exit(app.exec_())
     

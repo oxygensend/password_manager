@@ -9,15 +9,21 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+import sys
 
+sys.path.insert(0, '/home/szymon/Documents/password_manager/backend')
+from password_manager import Password_manager
+from psycopg2.errors import UniqueViolation
 
 
 class Ui_New_Account(object):
 
-    def __init__(self, Form, widget):
+    def __init__(self, Form, widget,pm):
+        
         self.setupUi(Form)
         self.Form = Form
         self.widget = widget
+        self.pm  = pm
 
     def setupUi(self, Form):
         Form.setObjectName("Form")
@@ -55,6 +61,8 @@ class Ui_New_Account(object):
         self.submit_button = QtWidgets.QPushButton(Form)
         self.submit_button.setGeometry(QtCore.QRect(70, 470, 191, 51))
         self.submit_button.setObjectName("submit_button")
+        self.submit_button.clicked.connect(self.submit_event)
+        self.submit_button.setAutoDefault(True)
         self.label_output = QtWidgets.QLabel(Form)
         self.label_output.setGeometry(QtCore.QRect(360, 60, 341, 161))
         self.label_output.setText("")
@@ -81,7 +89,69 @@ class Ui_New_Account(object):
     def back_event(self):
         self.widget.setCurrentIndex(0)
 
+
+    def check_lines(self):
+
+        if self.email_line.text() and self.app_line.text() \
+            and self.website_line.text() and self.password_line.text():
+
+            if self.user_line.text() is None:
+                self.user_line.setText('')
+
+            return 1
+        else:
+            return 0
+
+    def clear_lines(self):
+
+        self.email_line.clear()
+        self.website_line.clear()
+        self.app_line.clear()
+        self.password_line.clear()
+        self.user_line.clear()
+
+
     def submit_event(self):
-        pass
+
+        # TODO  - ustawic QMessageBox tak aby byl na ZAWSZE na srodku aplikacji
+
+        msg = QtWidgets.QMessageBox()
+        if not self.check_lines():
+           # msg.setText("Entry all needed data!")
+            #msg.exec_()
+            QtWidgets.QMessageBox.warning(msg, 
+                                    "ERROR", 
+                                    "Entry all needed data",
+                                    QtWidgets.QMessageBox.Ok)
+
+        else:
+            try:
+                
+                self.pm.store_data(self.user_line.text(),
+                                            self.password_line.text(),
+                                            self.email_line.text(),
+                                            self.website_line.text(),
+                                            self.app_line.text())
+                answer = QtWidgets.QMessageBox.question(msg,"",
+                                        "Record inserted, \
+                                         Do you mind enter another account?",
+                                        QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
+            
+                if answer == QtWidgets.QMessageBox.Yes:
+                    #msg.exec_()
+                    pass
+                else:
+                    #msg.exec_()
+                    self.back_event()
+
+            except UniqueViolation:
+                    QtWidgets.QMessageBox.warning(msg, 
+                                    "ERROR", 
+                                    "Entry all needed data",
+                                    QtWidgets.QMessageBox.Ok)
+
+        self.clear_lines()
+    
+
 
 

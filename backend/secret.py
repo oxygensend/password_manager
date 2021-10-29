@@ -1,0 +1,2 @@
+SECRET_PASSWORD = '3-drei=Na'
+DB_PASSWORD = 'polikuj12'

@@ -4,10 +4,11 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 class Ui_Find_Password(object):
 
-    def __init__(self, Form, widget):
+    def __init__(self, Form, widget, pm):
         self.setupUi(Form)
         self.Form = Form
         self.widget = widget
+        self.pm = pm
 
     def setupUi(self, Form):
         Form.setObjectName("Form")
@@ -28,6 +29,10 @@ class Ui_Find_Password(object):
         self.submit_button = QtWidgets.QPushButton(Form)
         self.submit_button.setGeometry(QtCore.QRect(70, 470, 191, 51))
         self.submit_button.setObjectName("submit_button")
+        self.submit_button.clicked.connect(self.submit_event)
+        
+        
+        
         self.label_output = QtWidgets.QLabel(Form)
         self.label_output.setGeometry(QtCore.QRect(360, 60, 341, 161))
         self.label_output.setText("")
@@ -52,5 +57,41 @@ class Ui_Find_Password(object):
     def back_event(self):
         self.widget.setCurrentIndex(0)
 
+
+    def check_lines(self):
+
+        return 1  if self.email_line and self.app_line else 0   
+        
+    def clean_lines(self):
+        
+        self.email_line.clear()
+        self.app_line.clear()
+        self.label_output.setText('')
+
     def submit_event(self):
-        pass
+        
+        msg = QtWidgets.QMessageBox()
+        if  not self.check_lines:
+            QtWidgets.QMessageBox.warning(msg,"","EROR",QtWidgets.QMessageBox.Ok)
+            return
+
+        result = self.pm.find_password(self.app_line.text(), self.email_line.text())
+
+        if result:
+            self.label_output.setText("This is your password for this accoutn: " + result[0])
+        else:
+            self.label_output.setText("There is no data in DB with entered parameters")
+
+    
+        answer = QtWidgets.QMessageBox.question(msg,"",
+          " Do you want try again?",
+            QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
+
+        if answer == QtWidgets.QMessageBox.Yes:            
+        
+            self.clean_lines()
+        
+        else:
+            #msg.exec_()
+            self.back_event()
+

@@ -21,15 +21,15 @@ from delete_account_ui import Ui_Delete_Account
 class Ui_MenuWindow(object):
 
      
-    def __init__(self, MainWindow, Form, Form_gp, Form_cp, Form_fp, Form_fa, Form_da, widget):
+    def __init__(self, MainWindow, Form, Form_gp, Form_cp, Form_fp, Form_fa, Form_da, widget, pm):
 
         self.setupUi(MainWindow)
-        self.ui_new_account = Ui_New_Account(Form, widget)
+        self.ui_new_account = Ui_New_Account(Form, widget, pm)
         self.ui_generate_passsword = Ui_Generate_Password(Form_gp, widget)
-        self.ui_find_password = Ui_Find_Password(Form_fp, widget)
+        self.ui_find_password = Ui_Find_Password(Form_fp, widget, pm)
         self.ui_change_password = Ui_Change_Password(Form_cp, widget)
         self.ui_find_accounts = Ui_Find_Accounts(Form_fa, widget)
-        self.ui_delete_account = Ui_Delete_Account(Form_da, widget)
+        self.ui_delete_account = Ui_Delete_Account(Form_da, widget, pm)
         self.Form_na = Form
         self.Form_gp = Form_gp
         self.Form_fp = Form_fp
