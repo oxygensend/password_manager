@@ -2,11 +2,11 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 class Ui_Change_Password(object):
 
-    def __init__(self, Form, widget):
+    def __init__(self, Form, widget, pm):
         self.setupUi(Form)
         self.Form = Form
         self.widget = widget
-
+        self.pm = pm
     def setupUi(self, Form):
         Form.setObjectName("Form")
         Form.resize(780, 603)
@@ -31,6 +31,7 @@ class Ui_Change_Password(object):
         self.submit_button = QtWidgets.QPushButton(Form)
         self.submit_button.setGeometry(QtCore.QRect(70, 470, 191, 51))
         self.submit_button.setObjectName("submit_button")
+        self.submit_button.clicked.connect(self.submit_event)
         self.label_output = QtWidgets.QLabel(Form)
         self.label_output.setGeometry(QtCore.QRect(360, 60, 341, 161))
         self.label_output.setText("")
@@ -52,8 +53,54 @@ class Ui_Change_Password(object):
         self.submit_button.setText(_translate("Form", "sumbit"))
         self.back_button.setText(_translate("Form", "back"))
 
+    def check_lines(self):
+
+        return 1 if self.app_line.text() and self.email_line.text() \
+        and self.password_line.text() else 0
+
     def back_event(self):
         self.widget.setCurrentIndex(0)
 
+    def clear_lines(self):
+
+        self.email_line.clear()
+        self.app_line.clear()
+        self.password_line.clear()
+        self.label_output.setText('')
+
+
     def submit_event(self):
-        pass
+        
+        msg = QtWidgets.QMessageBox()
+        msg.setGeometry(QtCore.QRect(450,300,200,300))
+        if  not self.check_lines:
+            QtWidgets.QMessageBox.warning(msg,"","EROR",QtWidgets.QMessageBox.Ok)
+            return
+
+        answer = QtWidgets.QMessageBox.question(msg,"",
+          "Are you sure of changing password?",
+            QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
+
+        if answer == QtWidgets.QMessageBox.Yes:
+
+            result = self.pm.change_password(self.app_line.text(),
+                                             self.email_line.text(),
+                                             self.password_line.text())
+
+            self.label_output.setText("Your new password is: " + result)
+        else:
+            self.clear_lines()
+            return
+
+    
+        answer = QtWidgets.QMessageBox.question(msg,"",
+          "Your new password is: " + result + "\nDo you want try again?",
+            QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
+
+        if answer == QtWidgets.QMessageBox.Yes:            
+        
+            self.clear_lines()
+        
+        else:
+            #msg.exec_()
+            self.back_event()

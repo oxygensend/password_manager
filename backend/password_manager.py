@@ -41,33 +41,16 @@ class Password_manager():
         except UniqueViolation:
             print('ERROR:Account for this email and application have already exist')
 
-    def generate_password(self):
+    def generate_password(self,app_name, email, plaintext, user, link,length):
         """Generating new password to the account"""
-        app_name = input('Enter application name: ').lower()
-        email = input('Address email for this account: ')
-        plaintext = input('Enter easy password for this site: ')
-        user = input('Enter username(if needed): ')
-        if user is None:
-            user = ''
-
-        link = input('Enter website link: ')
-
-        question = input('Do you want enter password length? Default and minimum is 10 (y/n)')
-        if question == 'y':
-            length = int(input('Enter length: '))
-
-        if question == 'n' or length <= 10:
-            length = 10
-
+       
         password = pg.password(plaintext,app_name,length)
-        try:
-            self.store_data(user, password, email, link, app_name)
+        
+        self.store_data(user, password, email, link, app_name)
+
+        return password
            
-            print('Your password for this account is ' + password)
-        except UniqueViolation:
-            print('ERROR:Account for this email and application have already exist')
-
-
+       
     def find_password(self, app_name, email):
         """Find appropriate password to the account"""
 
@@ -84,38 +67,27 @@ class Password_manager():
     
     def xd(self):
         return 'xd'
-    def find_accounts(self):
+    def find_accounts(self, email):
         """Find accounts to connected email"""
-        data = ('Password','Email','User','Link','App')
-        email = input('Address email for this account: ')
 
         postgres_select_query = "SELECT * FROM accounts WHERE email='"+email+"'"
         self.cursor.execute(postgres_select_query, email)
         self.connection.commit()
         result = self.cursor.fetchall()
-        if result is None:
-            print("Email you entered is not in DB")
-        for _,row in enumerate(result):
-            for i, var in enumerate(row):
-                print(data[i] +': ' + var,)
-            print('##'*13)
-    
-    def change_password(self):
-        """Change password to the account"""
-        app_name = input('Enter application name: ').lower()
-        email = input('Address email for this account: ')
-        plaintext = input('Enter easy password for this site: ')
-        new_password = pg.password(plaintext,app_name,10)
-        sure = input('Are you sure of changing the password? y/n ')
-        if sure == 'y':
-            postgres_select_query = "UPDATE accounts SET password='"+new_password+"' WHERE email='"+email+"'AND app_name='"+app_name+"'"
-            self.cursor.execute(postgres_select_query, (new_password,email,app_name))
-            self.connection.commit()
-            print('Your new password is:' + new_password)
         
-        else:
-            return
-    
+        return result
+        
+    def change_password(self, app_name, email, plaintext):
+        """Change password to the account"""
+        
+        
+        new_password = pg.password(plaintext,app_name,10)
+        postgres_select_query = "UPDATE accounts SET password='"+new_password+"' WHERE email='"+email+"'AND app_name='"+app_name+"'"
+        self.cursor.execute(postgres_select_query, (new_password,email,app_name))
+        self.connection.commit()
+
+        return new_password
+            
     def delete_account(self,app_name, email):
         """Drop account from DB"""
       

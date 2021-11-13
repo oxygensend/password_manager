@@ -116,6 +116,8 @@ class Ui_New_Account(object):
         # TODO  - ustawic QMessageBox tak aby byl na ZAWSZE na srodku aplikacji
 
         msg = QtWidgets.QMessageBox()
+        msg.setGeometry(QtCore.QRect(450,300,200,300))
+
         if not self.check_lines():
            # msg.setText("Entry all needed data!")
             #msg.exec_()
@@ -133,8 +135,7 @@ class Ui_New_Account(object):
                                             self.website_line.text(),
                                             self.app_line.text())
                 answer = QtWidgets.QMessageBox.question(msg,"",
-                                        "Record inserted, \
-                                         Do you mind enter another account?",
+                                        "Record inserted,\n Do you mind enter another account?",
                                         QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
             
                 if answer == QtWidgets.QMessageBox.Yes:

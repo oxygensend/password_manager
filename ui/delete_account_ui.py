@@ -12,6 +12,8 @@ class Ui_Delete_Account(Ui_Find_Password):
     def submit_event(self):
         
         msg = QtWidgets.QMessageBox()
+        msg.setGeometry(QtCore.QRect(450,300,200,300))
+
         if  not self.check_lines:
             QtWidgets.QMessageBox.warning(msg,"","EROR",QtWidgets.QMessageBox.Ok)
             return
@@ -25,15 +27,15 @@ class Ui_Delete_Account(Ui_Find_Password):
         if answer == QtWidgets.QMessageBox.Yes:
 
             result = self.pm.delete_account(self.app_line.text(), self.email_line.text())
-            self.label_output.setText("Account delete from DB")
+            answer = QtWidgets.QMessageBox.question(msg,"",
+          "Account deleted from DB\nDo you want delete another one?",
+            QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
         else:
             self.clean_lines()
             return
 
     
-        answer = QtWidgets.QMessageBox.question(msg,"",
-          " Do you want try again?",
-            QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
+        
 
         if answer == QtWidgets.QMessageBox.Yes:            
         

@@ -15,7 +15,7 @@ def password(plaintext, app_name, length=10):
     big_letters = ''.join(list(map(chr,range(65,91))))
     small_letters = big_letters.lower()
     digits = ''.join(list(map(chr,range(48,58))))
-    alphabet = (small_letters, big_letters, digits, '!@#$%^&*()-_+=~?,.')
+    alphabet = (small_letters, big_letters, digits, '!@#$^&*()-_+=~?,.')
     
     hexdigest_text = make_password(plaintext, app_name)
     # convert to int to mix password with new characters

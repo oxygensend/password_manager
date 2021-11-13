@@ -25,10 +25,10 @@ class Ui_MenuWindow(object):
 
         self.setupUi(MainWindow)
         self.ui_new_account = Ui_New_Account(Form, widget, pm)
-        self.ui_generate_passsword = Ui_Generate_Password(Form_gp, widget)
+        self.ui_generate_passsword = Ui_Generate_Password(Form_gp, widget, pm)
         self.ui_find_password = Ui_Find_Password(Form_fp, widget, pm)
-        self.ui_change_password = Ui_Change_Password(Form_cp, widget)
-        self.ui_find_accounts = Ui_Find_Accounts(Form_fa, widget)
+        self.ui_change_password = Ui_Change_Password(Form_cp, widget, pm)
+        self.ui_find_accounts = Ui_Find_Accounts(Form_fa, widget, pm)
         self.ui_delete_account = Ui_Delete_Account(Form_da, widget, pm)
         self.Form_na = Form
         self.Form_gp = Form_gp

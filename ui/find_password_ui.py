@@ -66,11 +66,12 @@ class Ui_Find_Password(object):
         
         self.email_line.clear()
         self.app_line.clear()
-        self.label_output.setText('')
 
     def submit_event(self):
         
         msg = QtWidgets.QMessageBox()
+        msg.setGeometry(QtCore.QRect(450,300,200,300))
+
         if  not self.check_lines:
             QtWidgets.QMessageBox.warning(msg,"","EROR",QtWidgets.QMessageBox.Ok)
             return
@@ -78,20 +79,11 @@ class Ui_Find_Password(object):
         result = self.pm.find_password(self.app_line.text(), self.email_line.text())
 
         if result:
-            self.label_output.setText("This is your password for this accoutn: " + result[0])
+            self.label_output.setText("This is your password for this account: " + result[0])
         else:
             self.label_output.setText("There is no data in DB with entered parameters")
 
     
-        answer = QtWidgets.QMessageBox.question(msg,"",
-          " Do you want try again?",
-            QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
-
-        if answer == QtWidgets.QMessageBox.Yes:            
-        
-            self.clean_lines()
-        
-        else:
-            #msg.exec_()
-            self.back_event()
-
+      
+        self.clean_lines()
+      

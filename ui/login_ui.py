@@ -13,7 +13,7 @@ from menu_ui import Ui_MenuWindow
 import sys
 sys.path.insert(0, '/home/szymon/Documents/password_manager/backend')
 from password_manager import Password_manager
-
+from secret import SECRET_PASSWORD
 
 
 class Ui_MainWindow():
@@ -86,7 +86,7 @@ class Ui_MainWindow():
         msg = QtWidgets.QMessageBox()
 
 
-        if self.lineEdit_password.text() == '1234':
+        if self.lineEdit_password.text() == SECRET_PASSWORD:
             MainWindow.close()
             widget.show()
             #MenuWindow.show()
