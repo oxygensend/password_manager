@@ -1,2 +1,2 @@
-SECRET_PASSWORD = '3-drei=Na'
-DB_PASSWORD = 'polikuj12'
+SECRET_PASSWORD = '********'
+DB_PASSWORD = '********'
